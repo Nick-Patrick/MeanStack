@@ -4,7 +4,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose');
 
-var env = process.env.NODE_ENV = process.env.NODE_ENV || ' development';
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var app = express();
 
@@ -24,10 +24,14 @@ app.use(express.static(__dirname + '/public'));
 
 
 
-var port = 3030;
+var port = process.env.PORT || 3030;
 app.listen(port);
+if (env === 'development') {
+    mongoose.connect('mongodb://localhost/meanTut');
+} else {
+    mongoose.connect('mongodb://npatrick:meantut@ds029187.mongolab.com:29187/meantut');
+}
 
-mongoose.connect('mongodb://localhost/meanTut');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error..'));
